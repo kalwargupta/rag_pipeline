@@ -1,6 +1,8 @@
 from langchain_chroma import Chroma
 from langchain_openai import OpenAIEmbeddings
 from dotenv import load_dotenv
+from langchain_openai import ChatOpenAI
+from langchain_core.messages import SystemMessage, HumanMessage
 
 load_dotenv()
 
@@ -41,3 +43,25 @@ for i, doc in enumerate(relevant_docs):
 # 6. "Who succeeded Ze'ev Drori as CEO in October 2008?"
 # 7. "What was the name of the autonomous spaceport drone ship that achieved the first successful sea landing?"
 # 8. "What was the original name of Microsoft before it became Microsoft?"
+
+## LLM Chatgpt 
+combined_input = f""" Based on the following documents, answer the user query: "{query}"
+
+Documents:
+{chr(10).join([f"- {doc.page_content}" for doc in relevant_docs])}
+
+Please provide a clear, helpful answer using only the information from these documents. If you can't find the answer in the documents, say "I don't have enough information to answer that question based on the provided documents."
+
+"""
+
+
+model= ChatOpenAI(model="gpt-4o")
+
+messages = [
+    SystemMessage(content="You are a helpful assistant that answers questions based on the provided documents."),
+    HumanMessage(content=combined_input)
+]
+
+result = model.invoke(messages)
+
+print(f"\n--- LLM Response ---\n{result.content}")
