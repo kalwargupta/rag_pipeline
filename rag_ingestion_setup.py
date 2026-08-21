@@ -69,11 +69,8 @@ def create_vector_store(chunks, persist_directory="db/chroma_db"):
     print("Creating embeddings and storing in ChromaDB...")
 
 
-    embedding_model = OpenAIEmbeddings(
-        model="text-embedding-3-small",
-        api_key=api_key
-    )
-    embedding_model = OpenAIEmbeddings(model="text-embedding-3-small", api_key=os.getenv("OPENAI_API_KEY"))
+
+    embedding_model = OpenAIEmbeddings(model="text-embedding-3-small")
     
     # Create ChromaDB vector store
     print("--- Creating vector store ---")
